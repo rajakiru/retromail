@@ -1,28 +1,15 @@
-// api/letters.js - Working version for Supabase
+// api/letters.js - Optimized for Supabase
 import { sql } from '@vercel/postgres';
 
 export default async function handler(req, res) {
-  // Set JSON headers FIRST
-  res.setHeader('Content-Type', 'application/json');
+  // CORS headers for all responses
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  console.log(`🔍 API called: ${req.method} ${req.url}`);
-
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
-  }
-
-  // Check database connection
-  if (!process.env.POSTGRES_URL) {
-    console.error('❌ POSTGRES_URL environment variable not found');
-    return res.status(500).json({
-      success: false,
-      error: 'Database configuration missing',
-      hint: 'Please set POSTGRES_URL in Vercel environment variables'
-    });
   }
 
   // Generate random 6-character code
@@ -33,7 +20,7 @@ export default async function handler(req, res) {
     ).join('');
   }
 
-  // Ensure unique code
+  // Ensure unique code by checking database
   async function generateUniqueCode() {
     let code;
     let attempts = 0;
@@ -43,6 +30,7 @@ export default async function handler(req, res) {
       attempts++;
       
       try {
+        // Check if code already exists
         const existing = await sql`
           SELECT 1 FROM letters WHERE code = ${code} LIMIT 1
         `;
@@ -50,7 +38,7 @@ export default async function handler(req, res) {
         if (existing.rows.length === 0) break;
       } catch (error) {
         console.error('Error checking code uniqueness:', error);
-        if (attempts >= 5) throw error;
+        throw new Error('Database error while generating code');
       }
     } while (attempts < 10);
     
@@ -61,44 +49,49 @@ export default async function handler(req, res) {
     return code;
   }
 
-  try {
-    // Test database connection
+  // Clean up expired letters (run occasionally)
+  async function cleanupExpiredLetters() {
     try {
-      await sql`SELECT 1`;
-      console.log('✅ Database connected');
-    } catch (dbError) {
-      console.error('❌ Database connection failed:', dbError);
-      return res.status(500).json({
-        success: false,
-        error: 'Database connection failed',
-        hint: 'Check your POSTGRES_URL format and database availability',
-        details: dbError.message
-      });
+      // Only cleanup 1% of the time to avoid unnecessary database calls
+      if (Math.random() > 0.01) return;
+
+      const result = await sql`
+        DELETE FROM letters 
+        WHERE expires_at < NOW()
+        AND created_at < NOW() - INTERVAL '1 day'
+      `;
+      
+      if (result.count > 0) {
+        console.log(`🧹 Cleaned up ${result.count} expired letters`);
+      }
+    } catch (error) {
+      console.error('Cleanup error (non-critical):', error);
     }
+  }
+
+  try {
+    // Periodic cleanup
+    await cleanupExpiredLetters();
 
     if (req.method === 'POST') {
-      console.log('📝 Processing POST request');
-      
+      // Create new letter
       const { subject, content, senderName } = req.body || {};
       
       // Validation
       if (!subject?.trim() || !content?.trim()) {
         return res.status(400).json({ 
-          success: false,
           error: 'Subject and content are required' 
         });
       }
 
       if (subject.length > 200) {
         return res.status(400).json({ 
-          success: false,
           error: 'Subject must be 200 characters or less' 
         });
       }
 
       if (content.length > 5000) {
         return res.status(400).json({ 
-          success: false,
           error: 'Content must be 5000 characters or less' 
         });
       }
@@ -106,9 +99,7 @@ export default async function handler(req, res) {
       const code = await generateUniqueCode();
       const cleanSenderName = (senderName || 'Anonymous Friend').trim().substring(0, 100);
 
-      console.log(`🔤 Generated unique code: ${code}`);
-
-      // Insert letter
+      // Insert letter into database
       const result = await sql`
         INSERT INTO letters (code, subject, content, sender_name, expires_at)
         VALUES (
@@ -121,15 +112,17 @@ export default async function handler(req, res) {
         RETURNING id, code, created_at
       `;
 
+      const letter = result.rows[0];
+
       // Update stats (non-blocking)
       sql`
-        UPDATE stats 
-        SET value = value + 1, updated_at = NOW()
-        WHERE metric = 'total_letters'
-      `.catch(e => console.log('Stats update failed:', e.message));
+        INSERT INTO stats (metric, value, updated_at) 
+        VALUES ('total_letters', 1, NOW())
+        ON CONFLICT (metric) 
+        DO UPDATE SET value = stats.value + 1, updated_at = NOW()
+      `.catch(e => console.log('Stats update failed (non-critical):', e.message));
 
-      const letter = result.rows[0];
-      console.log(`✅ Letter created successfully: ${code} (ID: ${letter.id})`);
+      console.log(`✅ Letter stored with code: ${code} (ID: ${letter.id})`);
 
       return res.status(201).json({
         success: true,
@@ -139,23 +132,22 @@ export default async function handler(req, res) {
       });
 
     } else if (req.method === 'GET') {
-      console.log('📖 Processing GET request');
-      
       const { code, stats } = req.query;
       
-      // Return stats if requested
+      // Return basic stats if requested
       if (stats === 'true') {
         try {
-          const [statsResult, activeCount] = await Promise.all([
+          const [statsResult, countResult] = await Promise.all([
             sql`SELECT metric, value FROM stats ORDER BY metric`,
-            sql`SELECT COUNT(*) as count FROM letters WHERE expires_at > NOW()`
+            sql`SELECT COUNT(*) as active FROM letters WHERE expires_at > NOW()`
           ]);
           
           const statsData = {};
           statsResult.rows.forEach(row => {
             statsData[row.metric] = parseInt(row.value);
           });
-          statsData.active_letters = parseInt(activeCount.rows[0].count);
+
+          statsData.active_letters = parseInt(countResult.rows[0].active);
 
           return res.status(200).json({
             success: true,
@@ -163,28 +155,26 @@ export default async function handler(req, res) {
           });
         } catch (error) {
           console.error('Stats error:', error);
-          return res.status(500).json({ 
-            success: false,
-            error: 'Failed to fetch stats' 
+          return res.status(200).json({ 
+            success: true, 
+            stats: { error: 'Stats temporarily unavailable' }
           });
         }
       }
 
-      // Get letter by code
       if (!code) {
         return res.status(400).json({ 
-          success: false,
           error: 'Code parameter is required' 
         });
       }
 
       if (!/^[A-Z0-9]{6}$/.test(code.toUpperCase())) {
         return res.status(400).json({ 
-          success: false,
           error: 'Invalid code format - must be 6 alphanumeric characters' 
         });
       }
 
+      // Get letter from database
       const result = await sql`
         SELECT id, code, subject, content, sender_name, created_at, read_count, expires_at
         FROM letters 
@@ -194,28 +184,29 @@ export default async function handler(req, res) {
       
       if (result.rows.length === 0) {
         return res.status(404).json({ 
-          success: false,
           error: 'Letter not found. It may have expired or never existed.' 
         });
       }
 
       const letter = result.rows[0];
-      const newReadCount = letter.read_count + 1;
 
-      // Update read count (non-blocking)
+      // Increment read count (non-blocking)
+      const newReadCount = letter.read_count + 1;
+      
       sql`
         UPDATE letters 
         SET read_count = ${newReadCount}, last_read_at = NOW()
         WHERE id = ${letter.id}
-      `.catch(e => console.log('Read count update failed:', e.message));
+      `.catch(e => console.log('Read count update failed (non-critical):', e.message));
 
       sql`
-        UPDATE stats 
-        SET value = value + 1, updated_at = NOW()
-        WHERE metric = 'total_reads'
-      `.catch(e => console.log('Stats update failed:', e.message));
+        INSERT INTO stats (metric, value, updated_at) 
+        VALUES ('total_reads', 1, NOW())
+        ON CONFLICT (metric) 
+        DO UPDATE SET value = stats.value + 1, updated_at = NOW()
+      `.catch(e => console.log('Stats update failed (non-critical):', e.message));
 
-      console.log(`📖 Letter retrieved: ${code} (reads: ${newReadCount})`);
+      console.log(`📖 Letter retrieved with code: ${code} (reads: ${newReadCount})`);
 
       return res.status(200).json({
         success: true,
@@ -232,11 +223,11 @@ export default async function handler(req, res) {
       });
 
     } else if (req.method === 'DELETE') {
+      // Delete letter by code (optional feature)
       const { code } = req.query;
       
       if (!code || !/^[A-Z0-9]{6}$/.test(code.toUpperCase())) {
         return res.status(400).json({ 
-          success: false,
           error: 'Valid 6-character code is required' 
         });
       }
@@ -249,12 +240,11 @@ export default async function handler(req, res) {
       
       if (result.rows.length === 0) {
         return res.status(404).json({ 
-          success: false,
           error: 'Letter not found' 
         });
       }
 
-      console.log(`🗑️ Letter deleted: ${code}`);
+      console.log(`🗑️ Letter deleted with code: ${code} (ID: ${result.rows[0].id})`);
 
       return res.status(200).json({
         success: true,
@@ -263,35 +253,41 @@ export default async function handler(req, res) {
 
     } else {
       return res.status(405).json({ 
-        success: false,
-        error: `Method ${req.method} not allowed` 
+        error: 'Method not allowed' 
       });
     }
 
   } catch (error) {
-    console.error('❌ Unhandled API Error:', error);
+    console.error('❌ API Error:', error);
     
-    // Handle specific database errors
-    const errorResponses = {
-      '23505': { error: 'Code collision detected, please try again', status: 409 },
-      '42P01': { error: 'Database tables not found. Please run the setup SQL.', status: 500 },
-      '28P01': { error: 'Database authentication failed. Check your connection string.', status: 500 },
-      '3D000': { error: 'Database does not exist. Check your connection string.', status: 500 }
-    };
-
-    const errorResponse = errorResponses[error.code];
-    if (errorResponse) {
-      return res.status(errorResponse.status).json({
-        success: false,
-        ...errorResponse
+    // Handle specific Postgres error codes
+    if (error.code === '23505') { // Unique violation
+      return res.status(500).json({ 
+        error: 'Code collision detected, please try again' 
       });
     }
 
-    // Generic error response
+    if (error.code === '42P01') { // Table doesn't exist
+      return res.status(500).json({ 
+        error: 'Database tables not found. Please run database setup first.',
+        setup_url: '/api/setup'
+      });
+    }
+
+    if (error.code === '28P01' || error.code === '3D000') { // Auth or database doesn't exist
+      return res.status(500).json({ 
+        error: 'Database connection failed. Please check your POSTGRES_URL.' 
+      });
+    }
+
+    if (error.message?.includes('Unable to generate unique code')) {
+      return res.status(500).json({ 
+        error: 'System is busy generating codes, please try again' 
+      });
+    }
+    
     return res.status(500).json({ 
-      success: false,
-      error: 'Internal server error',
-      message: error.message,
+      error: 'Internal server error. Please try again.',
       code: error.code || 'UNKNOWN',
       timestamp: new Date().toISOString()
     });
