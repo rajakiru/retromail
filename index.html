@@ -33,9 +33,6 @@
             color: var(--ink);
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 20% 50%, transparent 20%, rgba(0,0,0,0.02) 21%, rgba(0,0,0,0.02) 34%, transparent 35%, transparent),
-                linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.01) 25%, rgba(0,0,0,0.01) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01) 76%, transparent 77%, transparent);
         }
 
         .container {
@@ -81,86 +78,21 @@
             margin-top: 40px;
         }
 
-        .mailbox-icon {
-            font-size: 8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
+        .envelope {
             position: relative;
-        }
-
-        .mailbox-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .mailbox-icon.opening {
-            animation: mailboxOpen 0.8s ease-in-out;
-        }
-
-        @keyframes mailboxOpen {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.2) rotateY(10deg); }
-            50% { transform: scale(1.1) rotateY(-5deg); }
-            75% { transform: scale(1.15) rotateY(5deg); }
-            100% { transform: scale(1); }
-        }
-
-        .mailbox-label {
-            font-family: "Caveat", cursive;
-            font-size: 1.5rem;
-            color: var(--moss);
-            margin-top: 10px;
-        }
-
-        /* Mailbox Open View */
-        .mailbox-open {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .letters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .letter-item {
-            background: white;
-            border: 2px solid var(--dusty-blue);
-            border-radius: 8px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px var(--paper-shadow);
-            position: relative;
-        }
-
-        .letter-item:hover {
-            transform: translateY(-5px) scale(1.02);
+            width: 500px;
+            height: 320px;
+            background: var(--kraft);
+            border-radius: 12px;
             box-shadow: 0 8px 25px var(--paper-shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
         }
 
-        .letter-item h3 {
-            font-family: "Caveat", cursive;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: var(--moss);
-        }
-
-        .letter-item p {
-            font-size: 0.9rem;
-            color: var(--ink);
-            opacity: 0.8;
-        }
-
-        .letter-preview {
-            font-size: 0.8rem;
-            color: var(--dusty-blue);
-            margin-top: 10px;
-            font-style: italic;
+        .envelope:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px var(--paper-shadow);
         }
 
         .envelope-front {
@@ -237,72 +169,21 @@
             z-index: 1;
         }
 
-        .stamp {
-            position: absolute;
-            width: 45px;
-            height: 45px;
-            background: var(--warm-yellow);
-            border: 3px solid white;
-            border-radius: 3px;
-            cursor: grab;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 2px 8px var(--paper-shadow);
-            transition: transform 0.2s ease;
-            z-index: 10;
-            user-select: none;
-        }
-
-        .stamp:hover {
-            transform: scale(1.1) rotate(2deg);
-        }
-
-        .stamp.dragging {
-            cursor: grabbing;
-            transform: scale(1.2) rotate(5deg);
-            z-index: 20;
-        }
-
-        .stamp.on-envelope {
-            position: absolute;
-            z-index: 2;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .stamp.on-envelope:hover {
-            transform: scale(1.1) rotate(0deg) !important;
-            box-shadow: 0 4px 12px var(--paper-shadow);
-            filter: brightness(1.1);
-        }
-
-        .stamp.on-envelope:hover::after {
-            content: "✕";
+        .unread-badge {
             position: absolute;
             top: -8px;
             right: -8px;
-            width: 18px;
-            height: 18px;
             background: var(--faded-rose);
             color: white;
             border-radius: 50%;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 0.8rem;
             font-weight: bold;
-        }
-
-        .stamps-tray {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
+            z-index: 4;
         }
 
         .nav-buttons {
@@ -346,23 +227,6 @@
             box-shadow: 0 6px 16px var(--paper-shadow);
         }
 
-        .unread-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--faded-rose);
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 4;
-        }
-
         /* Letter View */
         .letter-view {
             max-width: 800px;
@@ -396,17 +260,6 @@
             to {
                 opacity: 1;
                 transform: translateY(0) rotate(0);
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateY(0) rotate(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-30px) rotate(2deg);
             }
         }
 
@@ -478,85 +331,6 @@
             text-align: center;
         }
 
-        .letter-content {
-            position: relative;
-            min-height: 300px;
-            padding: 20px;
-            border: 1px solid var(--dusty-blue);
-            border-radius: 6px;
-            background: rgba(255,255,255,0.8);
-        }
-
-        .letter-decorations {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .letter-images {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
-        .letter-images img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px var(--paper-shadow);
-        }
-
-        /* Paper Styles */
-        .paper-vintage { 
-            background: linear-gradient(135deg, #f4f1de 0%, #e9dcc9 100%);
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(120,119,108,0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(120,119,108,0.15) 0%, transparent 50%);
-        }
-        .paper-typewriter { 
-            background: #f8f6f0;
-            background-image: repeating-linear-gradient(transparent, transparent 23px, #d4af37 23px, #d4af37 24px);
-        }
-        .paper-telegram { 
-            background: #fff8dc;
-            background-image: 
-                linear-gradient(90deg, #daa520 0px, #daa520 2px, transparent 2px),
-                repeating-linear-gradient(transparent, transparent 19px, #daa520 19px, #daa520 20px);
-        }
-        .paper-manuscript { 
-            background: #faf0e6;
-            background-image: 
-                repeating-linear-gradient(transparent, transparent 29px, #8b4513 29px, #8b4513 30px),
-                linear-gradient(90deg, #cd853f 79px, #cd853f 81px, transparent 81px);
-        }
-        .paper-wartime { 
-            background: #f5f5dc;
-            background-image: 
-                linear-gradient(45deg, transparent 40%, rgba(139,69,19,0.1) 50%, transparent 60%),
-                repeating-linear-gradient(transparent, transparent 24px, rgba(139,69,19,0.2) 24px, rgba(139,69,19,0.2) 25px);
-        }
-        .paper-royal { 
-            background: linear-gradient(135deg, #f8f5ff 0%, #e6e0ff 100%);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(138,43,226,0.1) 0%, transparent 50%),
-                repeating-linear-gradient(transparent, transparent 24px, rgba(138,43,226,0.1) 24px, rgba(138,43,226,0.1) 25px);
-        }
-        .paper-nature { 
-            background: linear-gradient(135deg, #f0fff0 0%, #e8f5e8 100%);
-            background-image: 
-                radial-gradient(circle at 30% 70%, rgba(34,139,34,0.1) 0%, transparent 40%),
-                repeating-linear-gradient(transparent, transparent 24px, rgba(34,139,34,0.1) 24px, rgba(34,139,34,0.1) 25px);
-        }
-        .paper-sunset { 
-            background: linear-gradient(135deg, #fff5ee 0%, #ffe4e1 100%);
-            background-image: 
-                radial-gradient(circle at 80% 20%, rgba(255,69,0,0.1) 0%, transparent 50%),
-                repeating-linear-gradient(transparent, transparent 24px, rgba(255,69,0,0.1) 24px, rgba(255,69,0,0.1) 25px);
-        }
-
-        /* Customization Panel */
         .customization-panel {
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
@@ -604,12 +378,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        .font-preview {
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 5px;
-        }
-
         .color-btn {
             width: 40px;
             height: 40px;
@@ -622,6 +390,73 @@
         .color-btn.active {
             transform: scale(1.2);
             border-color: var(--ink);
+        }
+
+        .letter-content {
+            position: relative;
+            min-height: 300px;
+            padding: 20px;
+            border: 1px solid var(--dusty-blue);
+            border-radius: 6px;
+            background: rgba(255,255,255,0.8);
+        }
+
+        .letter-decorations {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .letter-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .letter-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px var(--paper-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--moss);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--dusty-blue);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.8);
+        }
+
+        /* Paper Styles */
+        .paper-vintage { 
+            background: linear-gradient(135deg, #f4f1de 0%, #e9dcc9 100%);
+        }
+        .paper-typewriter { 
+            background: #f8f6f0;
+            background-image: repeating-linear-gradient(transparent, transparent 23px, #d4af37 23px, #d4af37 24px);
+        }
+        .paper-telegram { 
+            background: #fff8dc;
+            background-image: 
+                linear-gradient(90deg, #daa520 0px, #daa520 2px, transparent 2px),
+                repeating-linear-gradient(transparent, transparent 19px, #daa520 19px, #daa520 20px);
         }
 
         .decoration-preview {
@@ -640,10 +475,6 @@
             transition: transform 0.2s ease;
         }
 
-        .decoration-item:hover {
-            transform: scale(1.1);
-        }
-
         .image-upload {
             border: 2px dashed var(--dusty-blue);
             border-radius: 8px;
@@ -651,11 +482,6 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-
-        .image-upload:hover {
-            border-color: var(--moss);
-            background: rgba(255,255,255,0.1);
         }
 
         .image-upload input {
@@ -701,127 +527,6 @@
             justify-content: center;
         }
 
-        .letter-preview {
-            margin-top: 20px;
-        }
-
-        .preview-card {
-            background: var(--cream);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 15px var(--paper-shadow);
-            min-height: 200px;
-        }
-
-        .preview-content {
-            font-family: 'Caveat', cursive;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: var(--ink);
-        }
-
-        .preview-text {
-            white-space: pre-wrap;
-            margin-bottom: 15px;
-        }
-
-        .preview-decorations {
-            font-size: 1.3rem;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .preview-images {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .preview-images img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px var(--paper-shadow);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: var(--moss);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--dusty-blue);
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 1rem;
-            background: rgba(255,255,255,0.8);
-        }
-
-        .form-group textarea {
-            font-family: "Caveat", cursive;
-            font-size: 1.2rem;
-            min-height: 200px;
-            resize: vertical;
-            line-height: 1.8;
-        }
-
-        /* Memory Box */
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .memory-item {
-            background: var(--kraft);
-            border-radius: 8px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px var(--paper-shadow);
-            position: relative;
-        }
-
-        .memory-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px var(--paper-shadow);
-        }
-
-        .memory-item h3 {
-            font-family: "Caveat", cursive;
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-            color: var(--ink);
-        }
-
-        .memory-item p {
-            font-size: 0.8rem;
-            color: var(--moss);
-            opacity: 0.8;
-        }
-
-        .search-box {
-            width: 100%;
-            max-width: 300px;
-            padding: 10px;
-            border: 1px solid var(--dusty-blue);
-            border-radius: 20px;
-            font-family: inherit;
-            margin-bottom: 20px;
-        }
-
         /* Toast notifications */
         .toast {
             position: fixed;
@@ -839,11 +544,6 @@
         @keyframes toastSlide {
             0%, 100% { transform: translateX(300px); opacity: 0; }
             10%, 90% { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
         }
 
         /* Code Modal */
@@ -898,52 +598,8 @@
             .customization-sidebar {
                 width: 100%;
                 max-height: none;
+                margin-top: 20px;
             }
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .envelope {
-                width: 450px;
-                height: 280px;
-            }
-            
-            .club-title {
-                font-size: 2rem;
-            }
-            
-            .letter-card,
-            .write-form {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            .nav-buttons {
-                gap: 10px;
-            }
-            
-            .btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Focus styles */
-        .btn:focus,
-        .envelope:focus,
-        .memory-item:focus,
-        .stamp:focus {
-            outline: 2px solid var(--dusty-blue);
-            outline-offset: 2px;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: 2px solid var(--dusty-blue);
-            outline-offset: 1px;
         }
     </style>
 </head>
@@ -956,49 +612,27 @@
 
         <div id="mailbox-view" class="view active">
             <div class="mailbox">
-                <div onclick="openMailbox()" role="button" tabindex="0" aria-label="Open mailbox" style="text-align: center;">
-                    <div class="mailbox-icon" id="mailbox-icon">📬</div>
-                    <div class="mailbox-label">Your Mailbox</div>
-                </div>
-
-                <div class="stamps-tray">
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="📮">📮</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🌟">🌟</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🍃">🍃</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="💌">💌</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🌙">🌙</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🕊️">🕊️</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🌻">🌻</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🦋">🦋</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="💖">💖</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🌈">🌈</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="⭐">⭐</div>
-                    <div class="stamp" draggable="true" ondragstart="dragStart(event)" data-stamp="🎀">🎀</div>
+                <div class="envelope" onclick="openLetter()" role="button" tabindex="0" aria-label="Open letter">
+                    <div class="envelope-front">
+                        <div class="postage-area"></div>
+                        <div class="addressee">Your Mailbox</div>
+                    </div>
+                    <div class="envelope-flap"></div>
+                    <div class="wax-seal"></div>
+                    <div class="unread-badge" id="unread-count">0</div>
                 </div>
 
                 <div class="nav-buttons">
                     <button class="btn btn-primary" onclick="showView('write')">Write New</button>
                     <button class="btn btn-secondary" onclick="showView('receive')">Receive Letter</button>
                     <button class="btn btn-tertiary" onclick="showView('received')">Received Letters</button>
-                    <button class="btn" onclick="clearAllStamps()" style="background: var(--faded-rose); color: white;">Clear Stamps</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="mailbox-open-view" class="view">
-            <div class="mailbox-open">
-                <h2>Your Mailbox</h2>
-                <div class="letters-grid" id="letters-grid"></div>
-                <div class="nav-buttons">
-                    <button class="btn btn-primary" onclick="showView('mailbox')">Close Mailbox</button>
                 </div>
             </div>
         </div>
 
         <div id="letter-view" class="view">
             <div class="letter-view">
-                <div class="letter-card" id="letter-content">
-                    </div>
+                <div class="letter-card" id="letter-content"></div>
                 <div class="letter-actions">
                     <button class="btn btn-secondary" onclick="replyToLetter()">Reply</button>
                     <button class="btn btn-primary" onclick="closeLetter()">Close Letter</button>
@@ -1045,11 +679,6 @@
                                 <div class="option-btn active" data-paper="vintage" title="Vintage Parchment">📜</div>
                                 <div class="option-btn" data-paper="typewriter" title="Typewriter Paper">⌨️</div>
                                 <div class="option-btn" data-paper="telegram" title="Telegram Form">📠</div>
-                                <div class="option-btn" data-paper="manuscript" title="Manuscript Paper">🖋️</div>
-                                <div class="option-btn" data-paper="wartime" title="Wartime Letter">✉️</div>
-                                <div class="option-btn" data-paper="royal" title="Royal Paper">👑</div>
-                                <div class="option-btn" data-paper="nature" title="Nature Paper">🌿</div>
-                                <div class="option-btn" data-paper="sunset" title="Sunset Paper">🌅</div>
                             </div>
                         </div>
                         
@@ -1057,16 +686,16 @@
                             <h4>✍️ Font Style</h4>
                             <div class="option-grid">
                                 <div class="option-btn active" data-font="caveat" title="Handwritten">
-                                    <div class="font-preview" style="font-family: 'Caveat', cursive;">Aa</div>
+                                    <div style="font-family: 'Caveat', cursive; font-size: 0.8rem;">Aa</div>
                                 </div>
                                 <div class="option-btn" data-font="special-elite" title="Typewriter">
-                                    <div class="font-preview" style="font-family: 'Special Elite', monospace;">Aa</div>
+                                    <div style="font-family: 'Special Elite', monospace; font-size: 0.8rem;">Aa</div>
                                 </div>
                                 <div class="option-btn" data-font="serif" title="Classic Serif">
-                                    <div class="font-preview" style="font-family: serif;">Aa</div>
+                                    <div style="font-family: serif; font-size: 0.8rem;">Aa</div>
                                 </div>
                                 <div class="option-btn" data-font="cursive" title="Elegant Script">
-                                    <div class="font-preview" style="font-family: cursive;">Aa</div>
+                                    <div style="font-family: cursive; font-size: 0.8rem;">Aa</div>
                                 </div>
                             </div>
                         </div>
@@ -1078,10 +707,6 @@
                                 <div class="color-btn" data-color="#6C7A5C" style="background: #6C7A5C;" title="Forest Green"></div>
                                 <div class="color-btn" data-color="#7FA3B2" style="background: #7FA3B2;" title="Ocean Blue"></div>
                                 <div class="color-btn" data-color="#C98088" style="background: #C98088;" title="Rose Pink"></div>
-                                <div class="color-btn" data-color="#8B4513" style="background: #8B4513;" title="Sepia Brown"></div>
-                                <div class="color-btn" data-color="#4B0082" style="background: #4B0082;" title="Royal Purple"></div>
-                                <div class="color-btn" data-color="#DC143C" style="background: #DC143C;" title="Crimson Red"></div>
-                                <div class="color-btn" data-color="#FF8C00" style="background: #FF8C00;" title="Sunset Orange"></div>
                             </div>
                         </div>
                         
@@ -1092,14 +717,6 @@
                                 <div class="option-btn" data-decoration="💖">💖</div>
                                 <div class="option-btn" data-decoration="🌸">🌸</div>
                                 <div class="option-btn" data-decoration="🦋">🦋</div>
-                                <div class="option-btn" data-decoration="✨">✨</div>
-                                <div class="option-btn" data-decoration="🌙">🌙</div>
-                                <div class="option-btn" data-decoration="🍃">🍃</div>
-                                <div class="option-btn" data-decoration="💫">💫</div>
-                                <div class="option-btn" data-decoration="🌹">🌹</div>
-                                <div class="option-btn" data-decoration="🕊️">🕊️</div>
-                                <div class="option-btn" data-decoration="🎭">🎭</div>
-                                <div class="option-btn" data-decoration="🎨">🎨</div>
                             </div>
                             <div class="decoration-preview" id="decoration-preview"></div>
                         </div>
@@ -1109,7 +726,6 @@
                             <div class="image-upload" onclick="document.getElementById('image-input').click()">
                                 <input type="file" id="image-input" accept="image/*" multiple onchange="handleImageUpload(event)">
                                 <div>📷 Click to upload images</div>
-                                <div style="font-size: 0.8rem; color: var(--moss); margin-top: 5px;">JPG, PNG, GIF supported</div>
                             </div>
                             <div class="uploaded-images" id="uploaded-images"></div>
                         </div>
@@ -1119,7 +735,7 @@
         </div>
 
         <div id="receive-view" class="view">
-            <div class="write-form">
+            <div class="write-form" style="max-width: 600px; margin: 0 auto;">
                 <h2>Receive Letter</h2>
                 <p style="margin-bottom: 20px; color: var(--moss);">Got a letter code from someone? Enter it below:</p>
                 <div class="form-group">
@@ -1134,12 +750,12 @@
         </div>
 
         <div id="received-view" class="view">
-            <h2>Received Letters</h2>
-            <input type="text" class="search-box" placeholder="Search letters..." oninput="filterReceivedLetters(this.value)">
-            <div class="memory-grid" id="received-grid">
+            <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+                <h2>Received Letters</h2>
+                <div id="received-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;"></div>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="showView('mailbox')">Back to Mailbox</button>
                 </div>
-            <div class="nav-buttons">
-                <button class="btn btn-primary" onclick="showView('mailbox')">Back to Mailbox</button>
             </div>
         </div>
     </div>
@@ -1189,15 +805,15 @@
         }
 
         function updateMailboxDisplay() {
-            const mailboxIcon = document.getElementById('mailbox-icon');
+            const envelope = document.querySelector('.envelope');
             const unreadCount = state.letters.filter(letter => !letter.read && letter.received).length;
             
             if (unreadCount === 0) {
-                mailboxIcon.textContent = '📭'; // Empty mailbox
-                mailboxIcon.style.opacity = '0.7';
+                envelope.style.opacity = '0.5';
+                envelope.style.cursor = 'default';
             } else {
-                mailboxIcon.textContent = '📬'; // Full mailbox
-                mailboxIcon.style.opacity = '1';
+                envelope.style.opacity = '1';
+                envelope.style.cursor = 'pointer';
             }
         }
 
@@ -1209,53 +825,31 @@
 
             if (viewName === 'write') {
                 setupWriteForm();
+                setTimeout(updateLetter, 100);
             } else if (viewName === 'received') {
                 updateReceivedLetters();
             }
         }
 
-        function openMailbox() {
-            const mailboxIcon = document.getElementById('mailbox-icon');
-            mailboxIcon.classList.add('opening');
-            
-            setTimeout(() => {
-                mailboxIcon.classList.remove('opening');
-                showView('mailbox-open');
-                updateLettersGrid();
-            }, 800);
-        }
-
-        function updateLettersGrid() {
-            const grid = document.getElementById('letters-grid');
+        function openLetter() {
+            const envelope = document.querySelector('.envelope');
             const unreadLetters = state.letters.filter(letter => !letter.read && letter.received);
 
-            if (unreadLetters.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; font-family: \'Caveat\', cursive; font-size: 1.5rem; color: var(--moss); opacity: 0.7;">Your mailbox is empty</div>';
-                return;
-            }
-
-            grid.innerHTML = unreadLetters.map(letter => {
-                const date = new Date(letter.dateISO).toLocaleDateString();
-                return `
-                    <div class="letter-item" onclick="openLetterFromGrid('${letter.id}')">
-                        <h3>${letter.subject}</h3>
-                        <p>From: ${letter.from}</p>
-                        <p>${date}</p>
-                        <div class="letter-preview">${letter.body.substring(0, 50)}${letter.body.length > 50 ? '...' : ''}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function openLetterFromGrid(letterId) {
-            const letter = state.letters.find(l => l.id === letterId);
-            if (letter) {
+            if (unreadLetters.length > 0) {
+                envelope.classList.add('opening');
+                const letter = unreadLetters[0];
                 letter.read = true;
                 state.currentLetter = letter;
                 saveState();
-                displayLetter(letter);
-                showView('letter');
-                updateMailboxDisplay();
+
+                setTimeout(() => {
+                    displayLetter(letter);
+                    showView('letter');
+                    envelope.classList.remove('opening');
+                    updateMailboxDisplay();
+                }, 900);
+            } else {
+                showToast('No new letters in your mailbox!');
             }
         }
 
@@ -1267,7 +861,6 @@
                 day: 'numeric'
             });
 
-            // Apply custom styles if available
             if (letter.paperStyle) {
                 content.className = `letter-card paper-${letter.paperStyle}`;
             }
@@ -1320,22 +913,12 @@
                 toField.value = '';
                 subjectField.value = '';
                 bodyField.value = '';
-                bodyField.placeholder = 'Dear friend...';
                 setTimeout(() => toField.focus(), 100);
             }
         }
 
         function closeLetter() {
-            const letterCard = document.querySelector('.letter-card');
-            if (letterCard) {
-                letterCard.style.animation = 'slideOut 0.6s cubic-bezier(.2,.7,.2,1)';
-                setTimeout(() => {
-                    showView('mailbox');
-                    letterCard.style.animation = '';
-                }, 500);
-            } else {
-                showView('mailbox');
-            }
+            showView('mailbox');
         }
 
         function sendLetter(event) {
@@ -1367,7 +950,6 @@
                 images: [...uploadedImages]
             };
 
-            // Store in shared letters for code access
             let sharedLetters = JSON.parse(localStorage.getItem('sharedLetters')) || {};
             sharedLetters[letterCode] = newLetter;
             localStorage.setItem('sharedLetters', JSON.stringify(sharedLetters));
@@ -1375,12 +957,10 @@
             state.letters.push(newLetter);
             saveState();
 
-            // Show sealing animation/feedback
             const submitBtn = document.querySelector('#letter-form button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Sealing...';
             
-            // Show code modal
             setTimeout(() => {
                 showCodeModal(letterCode, to);
                 resetWriteForm();
@@ -1431,14 +1011,12 @@
                 return;
             }
 
-            // Check if letter already exists (only check received letters, not sent ones)
             const existingLetter = state.letters.find(l => l.code === code && l.from !== 'You');
             if (existingLetter) {
                 showToast('Letter already received!');
                 return;
             }
             
-            // Add to personal mailbox
             const receivedLetter = {
                 ...letter,
                 id: 'received_' + Date.now(),
@@ -1462,17 +1040,14 @@
             document.getElementById('to-field').value = '';
             document.getElementById('subject-field').value = '';
             document.getElementById('body-field').value = '';
-            document.getElementById('body-field').placeholder = 'Dear friend...';
             document.getElementById('letter-form').reset();
             
-            // Reset customizations
             selectedPaper = 'vintage';
             selectedFont = 'caveat';
             selectedColor = '#3B3A39';
             selectedDecorations = [];
             uploadedImages = [];
             
-            // Reset UI
             document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector('[data-paper="vintage"]').classList.add('active');
             document.querySelector('[data-font="caveat"]').classList.add('active');
@@ -1484,7 +1059,6 @@
         }
 
         function cancelWriting() {
-            console.log('Cancel button clicked');
             resetWriteForm();
             showView('mailbox');
         }
@@ -1503,10 +1077,10 @@
             grid.innerHTML = receivedLetters.map(letter => {
                 const date = new Date(letter.dateISO).toLocaleDateString();
                 return `
-                    <div class="memory-item" onclick="openReceivedLetter('${letter.id}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter') openReceivedLetter('${letter.id}')">
-                        <h3>${letter.subject}</h3>
-                        <p>From: ${letter.from} • ${date}</p>
-                        <p>${letter.body.substring(0, 100)}${letter.body.length > 100 ? '...' : ''}</p>
+                    <div style="background: var(--kraft); border-radius: 8px; padding: 15px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px var(--paper-shadow);" onclick="openReceivedLetter('${letter.id}')" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <h3 style="font-family: 'Caveat', cursive; font-size: 1.2rem; margin-bottom: 5px; color: var(--ink);">${letter.subject}</h3>
+                        <p style="font-size: 0.8rem; color: var(--moss); opacity: 0.8;">From: ${letter.from} • ${date}</p>
+                        <p style="font-size: 0.8rem; color: var(--moss); opacity: 0.8;">${letter.body.substring(0, 100)}${letter.body.length > 100 ? '...' : ''}</p>
                     </div>
                 `;
             }).join('');
@@ -1521,20 +1095,6 @@
             }
         }
 
-        function filterReceivedLetters(searchTerm) {
-            const items = document.querySelectorAll('#received-grid .memory-item');
-            const term = searchTerm.toLowerCase();
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(term)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
         function replyToLetter() {
             if (state.currentLetter) {
                 setupWriteForm(true, state.currentLetter);
@@ -1542,216 +1102,16 @@
             }
         }
 
-        // Drag and drop functionality
-        let draggedStamp = null;
-        let draggedElement = null;
-
-        function dragStart(event) {
-            draggedStamp = event.target.dataset.stamp;
-            draggedElement = event.target;
-            event.target.classList.add('dragging');
-            event.dataTransfer.effectAllowed = 'copy';
-        }
-
-        function allowDrop(event) {
-            event.preventDefault();
-            event.dataTransfer.dropEffect = 'copy';
-        }
-
-        function dropStamp(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            if (draggedStamp) {
-                const envelope = document.querySelector('.envelope');
-                const rect = envelope.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                const y = event.clientY - rect.top;
-
-                const newStamp = document.createElement('div');
-                newStamp.className = 'stamp on-envelope';
-                newStamp.style.left = Math.max(5, Math.min(envelope.offsetWidth - 50, x - 22)) + 'px';
-                newStamp.style.top = Math.max(5, Math.min(envelope.offsetHeight - 50, y - 22)) + 'px';
-                newStamp.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
-                newStamp.textContent = draggedStamp;
-                newStamp.style.background = getRandomStampColor();
-                newStamp.onclick = function(e) { 
-                    e.stopPropagation(); 
-                    removeStamp(newStamp);
-                };
-                
-                envelope.appendChild(newStamp);
-
-                const stampId = Date.now() + Math.random();
-                newStamp.dataset.stampId = stampId;
-                saveStampPosition(stampId, draggedStamp, newStamp.style.left, newStamp.style.top, newStamp.style.transform);
-                
-                showToast(`${draggedStamp} stamp placed!`);
-            }
-            
-            if (draggedElement) {
-                draggedElement.classList.remove('dragging');
-            }
-            draggedStamp = null;
-            draggedElement = null;
-        }
-
-        function getRandomStampColor() {
-            const colors = ['var(--warm-yellow)', 'var(--dusty-blue)', 'var(--faded-rose)', 'var(--moss)', '#E6B3BA', '#A8DADC'];
-            return colors[Math.floor(Math.random() * colors.length)];
-        }
-
-        function saveStampPosition(stampId, stampEmoji, left, top, transform) {
-            if (!window.placedStamps) {
-                window.placedStamps = [];
-            }
-            
-            window.placedStamps.push({
-                id: stampId,
-                emoji: stampEmoji,
-                left: left,
-                top: top,
-                transform: transform
-            });
-            
-            localStorage.setItem('envelopeStamps', JSON.stringify(window.placedStamps));
-        }
-
-        function removeStamp(stampElement) {
-            const stampId = stampElement.dataset.stampId;
-            
-            stampElement.style.transition = 'all 0.3s ease';
-            stampElement.style.transform = 'scale(0) rotate(180deg)';
-            stampElement.style.opacity = '0';
-            
-            setTimeout(() => {
-                if (stampElement.parentNode) {
-                    stampElement.remove();
-                }
-            }, 300);
-            
-            if (window.placedStamps) {
-                window.placedStamps = window.placedStamps.filter(s => s.id != stampId);
-                localStorage.setItem('envelopeStamps', JSON.stringify(window.placedStamps));
-            }
-            
-            showToast('Stamp removed!');
-        }
-
-        function clearAllStamps() {
-            const envelope = document.querySelector('.envelope');
-            const stamps = envelope.querySelectorAll('.stamp.on-envelope');
-            
-            stamps.forEach(stamp => {
-                stamp.style.transition = 'all 0.3s ease';
-                stamp.style.transform = 'scale(0) rotate(180deg)';
-                stamp.style.opacity = '0';
-            });
-            
-            setTimeout(() => {
-                stamps.forEach(stamp => {
-                    if (stamp.parentNode) {
-                        stamp.remove();
-                    }
-                });
-            }, 300);
-            
-            window.placedStamps = [];
-            localStorage.removeItem('envelopeStamps');
-            
-            showToast('All stamps cleared!');
-        }
-
-        function loadSavedStamps() {
-            const saved = localStorage.getItem('envelopeStamps');
-            if (saved) {
-                window.placedStamps = JSON.parse(saved);
-                const envelope = document.querySelector('.envelope');
-                if (envelope && window.placedStamps) {
-                    window.placedStamps.forEach(stampData => {
-                        const stamp = document.createElement('div');
-                        stamp.className = 'stamp on-envelope';
-                        stamp.style.left = stampData.left;
-                        stamp.style.top = stampData.top;
-                        stamp.style.transform = stampData.transform;
-                        stamp.style.background = getRandomStampColor();
-                        stamp.textContent = stampData.emoji;
-                        stamp.dataset.stampId = stampData.id;
-                        stamp.onclick = function(e) { 
-                            e.stopPropagation(); 
-                            removeStamp(stamp);
-                        };
-                        envelope.appendChild(stamp);
-                    });
-                }
-            }
-        }
-
-        function showToast(message) {
-            const existingToast = document.querySelector('.toast');
-            if (existingToast) {
-                existingToast.remove();
-            }
-
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
-            toast.setAttribute('role', 'alert');
-            toast.setAttribute('aria-live', 'polite');
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.remove();
-                }
-            }, 3000);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                const currentView = document.querySelector('.view.active');
-                if (currentView.id === 'letter-view') {
-                    closeLetter();
-                } else {
-                    showView('mailbox');
-                }
-            } else if (event.key === 'r' || event.key === 'R') {
-                const currentView = document.querySelector('.view.active');
-                if (currentView.id === 'letter-view' && state.currentLetter) {
-                    replyToLetter();
-                }
-            }
-        });
-
-        // Clean up drag classes
-        document.addEventListener('dragend', (event) => {
-            if (event.target.classList.contains('stamp')) {
-                event.target.classList.remove('dragging');
-            }
-        });
-
-        // Prevent envelope opening when clicking on stamps
-        document.addEventListener('click', (event) => {
-            if (event.target.classList.contains('on-envelope')) {
-                event.stopPropagation();
-            }
-        });
-
-        // Customization functions
         function initializeCustomization() {
-            // Paper selection
             document.querySelectorAll('[data-paper]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-paper]').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     selectedPaper = this.dataset.paper;
                     updateLetter();
-                    showToast(`Paper style changed to ${this.title}`);
                 });
             });
 
-            // Font selection
             document.querySelectorAll('[data-font]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-font]').forEach(b => b.classList.remove('active'));
@@ -1761,7 +1121,6 @@
                 });
             });
 
-            // Color selection
             document.querySelectorAll('[data-color]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-color]').forEach(b => b.classList.remove('active'));
@@ -1771,7 +1130,6 @@
                 });
             });
 
-            // Decoration selection
             document.querySelectorAll('[data-decoration]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const decoration = this.dataset.decoration;
@@ -1784,16 +1142,6 @@
             });
         }
 
-        function getFontFamily(fontStyle) {
-            const fonts = {
-                'caveat': "'Caveat', cursive",
-                'special-elite': "'Special Elite', monospace",
-                'serif': 'serif',
-                'cursive': 'cursive'
-            };
-            return fonts[fontStyle] || "'Caveat', cursive";
-        }
-
         function updateLetter() {
             const letterContent = document.getElementById('letter-content');
             const letterDecorations = document.getElementById('letter-decorations');
@@ -1803,49 +1151,41 @@
             
             if (!letterContent || !bodyField) return;
             
-            // Apply paper style
             writeForm.className = `write-form paper-${selectedPaper}`;
             letterContent.className = `letter-content paper-${selectedPaper}`;
             
-            // Apply font and color
             const fontFamily = getFontFamily(selectedFont);
             letterContent.style.fontFamily = fontFamily;
             letterContent.style.color = selectedColor;
             bodyField.style.fontFamily = fontFamily;
             bodyField.style.color = selectedColor;
             
-            // Update decorations
             if (letterDecorations) {
                 letterDecorations.textContent = selectedDecorations.join(' ');
             }
             
-            // Update images
             if (letterImages) {
                 letterImages.innerHTML = uploadedImages.map(img => 
                     `<img src="${img}" alt="Letter image">`
                 ).join('');
             }
             
-            // Auto-resize textarea
             bodyField.style.height = 'auto';
             bodyField.style.height = Math.max(200, bodyField.scrollHeight) + 'px';
         }
 
         function updateDecorationPreview() {
             const preview = document.getElementById('decoration-preview');
-            const previewDecorations = document.getElementById('preview-decorations');
             
             preview.innerHTML = selectedDecorations.map(decoration => 
                 `<span class="decoration-item" onclick="removeDecoration('${decoration}')">${decoration}</span>`
             ).join('');
-            
-            previewDecorations.textContent = selectedDecorations.join(' ');
         }
 
         function removeDecoration(decoration) {
             selectedDecorations = selectedDecorations.filter(d => d !== decoration);
             updateDecorationPreview();
-            updatePreview();
+            updateLetter();
         }
 
         function handleImageUpload(event) {
@@ -1857,7 +1197,7 @@
                     reader.onload = function(e) {
                         uploadedImages.push(e.target.result);
                         updateUploadedImages();
-                        updatePreview();
+                        updateLetter();
                     };
                     reader.readAsDataURL(file);
                 }
@@ -1866,7 +1206,6 @@
 
         function updateUploadedImages() {
             const container = document.getElementById('uploaded-images');
-            const previewImages = document.getElementById('preview-images');
             
             container.innerHTML = uploadedImages.map((img, index) => `
                 <div class="uploaded-image">
@@ -1874,24 +1213,46 @@
                     <button class="remove-image" onclick="removeImage(${index})">×</button>
                 </div>
             `).join('');
-            
-            previewImages.innerHTML = uploadedImages.map(img => 
-                `<img src="${img}" alt="Preview image">`
-            ).join('');
         }
 
         function removeImage(index) {
             uploadedImages.splice(index, 1);
             updateUploadedImages();
-            updatePreview();
+            updateLetter();
+        }
+
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 3000);
+        }
+
+        function getFontFamily(fontStyle) {
+            const fonts = {
+                'caveat': "'Caveat', cursive",
+                'special-elite': "'Special Elite', monospace",
+                'serif': 'serif',
+                'cursive': 'cursive'
+            };
+            return fonts[fontStyle] || "'Caveat', cursive";
         }
 
         // Initialize app when page loads
         document.addEventListener('DOMContentLoaded', () => {
             initializeApp();
-            loadSavedStamps();
             initializeCustomization();
-            setTimeout(updateLetter, 100);
         });
     </script>
 </body>
