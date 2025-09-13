@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Mail Club - Kiru & Aadya</title>
+    <title>Digital Mail Club</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
@@ -281,26 +281,6 @@
             box-shadow: 0 6px 16px var(--paper-shadow);
         }
 
-        .user-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--faded-rose);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-family: "Caveat", cursive;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .user-toggle:hover {
-            background: #B8707A;
-            transform: scale(1.05);
-        }
-
         .unread-badge {
             position: absolute;
             top: -8px;
@@ -391,7 +371,7 @@
 
         /* Write View */
         .write-form {
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             background: var(--cream);
             border-radius: 12px;
@@ -406,12 +386,12 @@
                 );
         }
 
-        .paper-parchment { 
+        /* Paper Styles */
+        .paper-vintage { 
             background: linear-gradient(135deg, #f4f1de 0%, #e9dcc9 100%);
             background-image: 
                 radial-gradient(circle at 20% 80%, rgba(120,119,108,0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(120,119,108,0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120,119,108,0.1) 0%, transparent 50%);
+                radial-gradient(circle at 80% 20%, rgba(120,119,108,0.15) 0%, transparent 50%);
         }
         .paper-typewriter { 
             background: #f8f6f0;
@@ -435,7 +415,26 @@
                 linear-gradient(45deg, transparent 40%, rgba(139,69,19,0.1) 50%, transparent 60%),
                 repeating-linear-gradient(transparent, transparent 24px, rgba(139,69,19,0.2) 24px, rgba(139,69,19,0.2) 25px);
         }
+        .paper-royal { 
+            background: linear-gradient(135deg, #f8f5ff 0%, #e6e0ff 100%);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(138,43,226,0.1) 0%, transparent 50%),
+                repeating-linear-gradient(transparent, transparent 24px, rgba(138,43,226,0.1) 24px, rgba(138,43,226,0.1) 25px);
+        }
+        .paper-nature { 
+            background: linear-gradient(135deg, #f0fff0 0%, #e8f5e8 100%);
+            background-image: 
+                radial-gradient(circle at 30% 70%, rgba(34,139,34,0.1) 0%, transparent 40%),
+                repeating-linear-gradient(transparent, transparent 24px, rgba(34,139,34,0.1) 24px, rgba(34,139,34,0.1) 25px);
+        }
+        .paper-sunset { 
+            background: linear-gradient(135deg, #fff5ee 0%, #ffe4e1 100%);
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(255,69,0,0.1) 0%, transparent 50%),
+                repeating-linear-gradient(transparent, transparent 24px, rgba(255,69,0,0.1) 24px, rgba(255,69,0,0.1) 25px);
+        }
 
+        /* Customization Panel */
         .customization-panel {
             background: rgba(255,255,255,0.3);
             border-radius: 10px;
@@ -445,7 +444,7 @@
         }
 
         .custom-section {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .custom-section h4 {
@@ -455,15 +454,16 @@
             color: var(--moss);
         }
 
-        .paper-options, .decoration-options {
-            display: flex;
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
             gap: 10px;
-            flex-wrap: wrap;
+            margin-bottom: 15px;
         }
 
-        .paper-btn, .decoration-btn {
-            width: 40px;
-            height: 40px;
+        .option-btn {
+            width: 60px;
+            height: 60px;
             border: 2px solid var(--dusty-blue);
             border-radius: 8px;
             cursor: pointer;
@@ -471,13 +471,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            background: white;
+            position: relative;
         }
 
-        .paper-btn.active, .decoration-btn.active {
+        .option-btn.active {
             border-color: var(--moss);
             transform: scale(1.1);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .font-preview {
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .color-btn.active {
+            transform: scale(1.2);
+            border-color: var(--ink);
         }
 
         .decoration-preview {
@@ -500,15 +522,65 @@
             transform: scale(1.1);
         }
 
-        .letter-preview {
-            margin-top: 20px;
+        .image-upload {
+            border: 2px dashed var(--dusty-blue);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .letter-preview h4 {
-            font-family: 'Caveat', cursive;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--moss);
+        .image-upload:hover {
+            border-color: var(--moss);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .image-upload input {
+            display: none;
+        }
+
+        .uploaded-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .uploaded-image {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--paper-shadow);
+        }
+
+        .uploaded-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: var(--faded-rose);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .letter-preview {
+            margin-top: 20px;
         }
 
         .preview-card {
@@ -516,7 +588,7 @@
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 4px 15px var(--paper-shadow);
-            min-height: 150px;
+            min-height: 200px;
         }
 
         .preview-content {
@@ -534,6 +606,22 @@
         .preview-decorations {
             font-size: 1.3rem;
             text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .preview-images {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .preview-images img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px var(--paper-shadow);
         }
 
         .form-group {
@@ -602,13 +690,6 @@
             opacity: 0.8;
         }
 
-        .filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
         .search-box {
             width: 100%;
             max-width: 300px;
@@ -617,33 +698,6 @@
             border-radius: 20px;
             font-family: inherit;
             margin-bottom: 20px;
-        }
-
-        /* Prompts View */
-        .prompts-list {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .prompt-card {
-            background: var(--warm-yellow);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 6px 20px var(--paper-shadow);
-        }
-
-        .prompt-title {
-            font-family: "Caveat", cursive;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: var(--ink);
-        }
-
-        .prompt-text {
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
         }
 
         /* Toast notifications */
@@ -739,37 +793,6 @@
             }
         }
 
-        /* Accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-            
-            .envelope-flap {
-                transition: none;
-            }
-            
-            .letter-card {
-                animation: none;
-            }
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
         /* Focus styles */
         .btn:focus,
         .envelope:focus,
@@ -788,11 +811,9 @@
 </head>
 <body>
     <div class="container">
-        <button class="user-toggle" onclick="toggleUser()" aria-label="Switch user">I'm <span id="current-user">Kiru</span></button>
-        
         <div class="header">
             <h1 class="club-title">Digital Mail Club</h1>
-            <p class="privacy-label">Private club for Kiru ↔ Aadya</p>
+            <p class="privacy-label">Send letters to anyone</p>
         </div>
 
         <div id="mailbox-view" class="view active">
@@ -800,11 +821,11 @@
                 <div class="envelope" onclick="openLetter()" ondrop="dropStamp(event)" ondragover="allowDrop(event)" role="button" tabindex="0" aria-expanded="false" aria-label="Open letter">
                     <div class="envelope-front">
                         <div class="postage-area"></div>
-                        <div class="addressee">To: <span id="envelope-addressee">Aadya</span></div>
+                        <div class="addressee">Your Mailbox</div>
                     </div>
                     <div class="envelope-flap"></div>
                     <div class="wax-seal"></div>
-                    <div class="unread-badge" id="unread-count">1</div>
+                    <div class="unread-badge" id="unread-count">0</div>
                 </div>
 
                 <div class="stamps-tray">
@@ -825,7 +846,6 @@
                 <div class="nav-buttons">
                     <button class="btn btn-primary" onclick="showView('write')">Write New</button>
                     <button class="btn btn-secondary" onclick="showView('receive')">Receive Letter</button>
-                    <button class="btn btn-secondary" onclick="showView('prompts')">Weekly Prompts</button>
                     <button class="btn btn-tertiary" onclick="showView('received')">Received Letters</button>
                     <button class="btn" onclick="clearAllStamps()" style="background: var(--faded-rose); color: white;">Clear Stamps</button>
                 </div>
@@ -839,7 +859,6 @@
                 <div class="letter-actions">
                     <button class="btn btn-secondary" onclick="replyToLetter()">Reply</button>
                     <button class="btn btn-primary" onclick="closeLetter()">Close Letter</button>
-
                 </div>
             </div>
         </div>
@@ -850,48 +869,102 @@
                 <form id="letter-form" onsubmit="sendLetter(event)">
                     <div class="form-group">
                         <label for="to-field">To:</label>
-                        <input type="text" id="to-field" required readonly>
+                        <input type="text" id="to-field" required placeholder="Enter recipient name">
                     </div>
                     <div class="form-group">
                         <label for="subject-field">Subject:</label>
                         <input type="text" id="subject-field" required>
                     </div>
+                    
                     <div class="customization-panel">
                         <div class="custom-section">
                             <h4>📜 Paper Style</h4>
-                            <div class="paper-options">
-                                <div class="paper-btn active" data-paper="parchment" title="Aged Parchment">📜</div>
-                                <div class="paper-btn" data-paper="typewriter" title="Typewriter Paper">⌨️</div>
-                                <div class="paper-btn" data-paper="telegram" title="Telegram Form">📠</div>
-                                <div class="paper-btn" data-paper="manuscript" title="Manuscript Paper">🖋️</div>
-                                <div class="paper-btn" data-paper="wartime" title="Wartime Letter">✉️</div>
+                            <div class="option-grid">
+                                <div class="option-btn active" data-paper="vintage" title="Vintage Parchment">📜</div>
+                                <div class="option-btn" data-paper="typewriter" title="Typewriter Paper">⌨️</div>
+                                <div class="option-btn" data-paper="telegram" title="Telegram Form">📠</div>
+                                <div class="option-btn" data-paper="manuscript" title="Manuscript Paper">🖋️</div>
+                                <div class="option-btn" data-paper="wartime" title="Wartime Letter">✉️</div>
+                                <div class="option-btn" data-paper="royal" title="Royal Paper">👑</div>
+                                <div class="option-btn" data-paper="nature" title="Nature Paper">🌿</div>
+                                <div class="option-btn" data-paper="sunset" title="Sunset Paper">🌅</div>
                             </div>
                         </div>
+                        
+                        <div class="custom-section">
+                            <h4>✍️ Font Style</h4>
+                            <div class="option-grid">
+                                <div class="option-btn active" data-font="caveat" title="Handwritten">
+                                    <div class="font-preview" style="font-family: 'Caveat', cursive;">Aa</div>
+                                </div>
+                                <div class="option-btn" data-font="special-elite" title="Typewriter">
+                                    <div class="font-preview" style="font-family: 'Special Elite', monospace;">Aa</div>
+                                </div>
+                                <div class="option-btn" data-font="serif" title="Classic Serif">
+                                    <div class="font-preview" style="font-family: serif;">Aa</div>
+                                </div>
+                                <div class="option-btn" data-font="cursive" title="Elegant Script">
+                                    <div class="font-preview" style="font-family: cursive;">Aa</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="custom-section">
+                            <h4>🎨 Text Color</h4>
+                            <div class="option-grid">
+                                <div class="color-btn active" data-color="#3B3A39" style="background: #3B3A39;" title="Ink Black"></div>
+                                <div class="color-btn" data-color="#6C7A5C" style="background: #6C7A5C;" title="Forest Green"></div>
+                                <div class="color-btn" data-color="#7FA3B2" style="background: #7FA3B2;" title="Ocean Blue"></div>
+                                <div class="color-btn" data-color="#C98088" style="background: #C98088;" title="Rose Pink"></div>
+                                <div class="color-btn" data-color="#8B4513" style="background: #8B4513;" title="Sepia Brown"></div>
+                                <div class="color-btn" data-color="#4B0082" style="background: #4B0082;" title="Royal Purple"></div>
+                                <div class="color-btn" data-color="#DC143C" style="background: #DC143C;" title="Crimson Red"></div>
+                                <div class="color-btn" data-color="#FF8C00" style="background: #FF8C00;" title="Sunset Orange"></div>
+                            </div>
+                        </div>
+                        
                         <div class="custom-section">
                             <h4>✨ Decorations</h4>
-                            <div class="decoration-options">
-                                <div class="decoration-btn" data-decoration="🌟">🌟</div>
-                                <div class="decoration-btn" data-decoration="💖">💖</div>
-                                <div class="decoration-btn" data-decoration="🌸">🌸</div>
-                                <div class="decoration-btn" data-decoration="🦋">🦋</div>
-                                <div class="decoration-btn" data-decoration="✨">✨</div>
-                                <div class="decoration-btn" data-decoration="🌙">🌙</div>
-                                <div class="decoration-btn" data-decoration="🍃">🍃</div>
-                                <div class="decoration-btn" data-decoration="💫">💫</div>
+                            <div class="option-grid">
+                                <div class="option-btn" data-decoration="🌟">🌟</div>
+                                <div class="option-btn" data-decoration="💖">💖</div>
+                                <div class="option-btn" data-decoration="🌸">🌸</div>
+                                <div class="option-btn" data-decoration="🦋">🦋</div>
+                                <div class="option-btn" data-decoration="✨">✨</div>
+                                <div class="option-btn" data-decoration="🌙">🌙</div>
+                                <div class="option-btn" data-decoration="🍃">🍃</div>
+                                <div class="option-btn" data-decoration="💫">💫</div>
+                                <div class="option-btn" data-decoration="🌹">🌹</div>
+                                <div class="option-btn" data-decoration="🕊️">🕊️</div>
+                                <div class="option-btn" data-decoration="🎭">🎭</div>
+                                <div class="option-btn" data-decoration="🎨">🎨</div>
                             </div>
                             <div class="decoration-preview" id="decoration-preview"></div>
                         </div>
+                        
+                        <div class="custom-section">
+                            <h4>📷 Add Images</h4>
+                            <div class="image-upload" onclick="document.getElementById('image-input').click()">
+                                <input type="file" id="image-input" accept="image/*" multiple onchange="handleImageUpload(event)">
+                                <div>📷 Click to upload images</div>
+                                <div style="font-size: 0.8rem; color: var(--moss); margin-top: 5px;">JPG, PNG, GIF supported</div>
+                            </div>
+                            <div class="uploaded-images" id="uploaded-images"></div>
+                        </div>
                     </div>
+                    
                     <div class="form-group">
                         <label for="body-field">Your Letter:</label>
                         <textarea id="body-field" required placeholder="Dear friend..." oninput="updatePreview()"></textarea>
                     </div>
+                    
                     <div class="letter-preview">
                         <h4>📖 Preview</h4>
                         <div class="preview-card" id="preview-card">
                             <div class="preview-content" id="preview-content">
-                                <div class="preview-text">Dear friend...</div>
                                 <div class="preview-decorations" id="preview-decorations"></div>
+                                <div class="preview-text" id="preview-text">Dear friend...</div>
+                                <div class="preview-images" id="preview-images"></div>
                             </div>
                         </div>
                     </div>
@@ -918,17 +991,6 @@
             </div>
         </div>
 
-        <div id="prompts-view" class="view">
-            <div class="prompts-list">
-                <h2>Weekly Prompts</h2>
-                <div id="prompts-container">
-                    </div>
-                <div class="nav-buttons">
-                    <button class="btn btn-primary" onclick="showView('mailbox')">Back to Mailbox</button>
-                </div>
-            </div>
-        </div>
-
         <div id="received-view" class="view">
             <h2>Received Letters</h2>
             <input type="text" class="search-box" placeholder="Search letters..." oninput="filterReceivedLetters(this.value)">
@@ -944,56 +1006,23 @@
         // App state
         let state = {
             letters: [],
-            collectibles: { stampsUnlocked: ['📮', '🌟', '🍃', '💌'] },
-            user: { name: 'Kiru' },
-            currentLetter: null,
-            currentFilter: 'all'
+            currentLetter: null
         };
 
-        // Weekly prompts
-        const weeklyPrompts = [
-            "A memory you return to when you can't sleep.",
-            "Write a letter to future-you in one year.",
-            "A film/book that held your hand lately.",
-        ];
+        // Customization state
+        let selectedPaper = 'vintage';
+        let selectedFont = 'caveat';
+        let selectedColor = '#3B3A39';
+        let selectedDecorations = [];
+        let uploadedImages = [];
 
-        // Seed data
+        // Initialize app
         function initializeApp() {
             const savedState = localStorage.getItem('digitalMailClub');
             if (savedState) {
                 state = JSON.parse(savedState);
-            } else {
-                // Seed with sample letters
-                state.letters = [
-                    {
-                        id: 'seed1',
-                        from: 'Aadya',
-                        to: 'Kiru',
-                        subject: 'Prompt #2 Response',
-                        body: `Romantic relaiship is based around building a life together and platonic is supporting whatever life u already had. is that true? I don't understand how people don't want to center their lives around friends, am I absurd? maybe this is our answer though, bc in the society we live in now, isn't the only option a romantic relationship?\n\nA.`,
-                        dateISO: '2025-01-15T14:30:00Z',
-                        type: 'letter',
-                        stamps: [],
-                        attachments: []
-                    },
-                    {
-                        id: 'seed2',
-                        from: 'Aadya',
-                        to: 'Kiru',
-                        subject: 'Happy Birthday, Aadya!',
-                        body: `dear aadya,\nhappy birthday!! i can't believe i'm not next to you right now, helping with your decorations and everything. i keep wanting to just catch a flight — or better yet, fly us both out to new york. you should actually plan a trip back to the us, we could escape for a weekend. stay with me for a month, i'd love that.\ni had all these gift ideas i thought of packing and sending, but the shipping costs were ridiculous. i even made a list. then i realized i don't even have your current address, and you're moving out by the end of this month anyway, so it wouldn't work. send me your new one — i'll try again.\nanyway, i've been obsessed lately with the idea of mail clubs — the way people send each other envelopes across the world, filled with favorite art, quotes, book recs, stickers. it's so cute. i even looked up how much it costs to join one (there's a duck mail club from canada, $15 plus shipping). but it made me think of us — how we've always had our own little exchange of letters and fragments. so i thought, why not make ours digital?\ni created this little space for us. i know, it's ironic — we always talk about how glued online we are, how scrolling replaces real connection, how there's so little physical media around us anymore. but maybe that's why i wanted to carve out this corner: not another feed, not another scroll, but a slower space that belongs just to us. inspired by beautiful world, where are you — our own little club, where we can write to each other, drop in prompts, add polaroids, keep our fragments safe. this is just the first version. i'll make it better — add stickers, little customizations, ways to pin in pieces of us.\nand I haven't added all our past mails here yet. Right now its just a piece plucked out from the moment, but once I figure out a passcode or some sort of secret key, we can have a whole collection here, auto display these emails, add in polaroid, stickers, art, movie or book quotes.\nLots of love,\nKiruuuu`,
-                        dateISO: '2025-01-18T16:45:00Z',
-                        type: 'prompt',
-                        promptId: '2',
-                        stamps: [],
-                        attachments: []
-                    }
-                ];
-                saveState();
             }
-            
             updateUI();
-            generateWeeklyPrompts();
         }
 
         function saveState() {
@@ -1001,27 +1030,13 @@
         }
 
         function updateUI() {
-            updateEnvelope();
-            updateUserToggle();
-            updateReceivedLetters();
             updateUnreadCount();
+            updateReceivedLetters();
             updateMailboxDisplay();
         }
 
-        function updateEnvelope() {
-            const addressee = state.user.name === 'Kiru' ? 'Kiru' : 'Aadya';
-            document.getElementById('envelope-addressee').textContent = addressee;
-        }
-
-        function updateUserToggle() {
-            document.getElementById('current-user').textContent = state.user.name;
-            updateEnvelope();
-        }
-
         function updateUnreadCount() {
-            const unreadCount = state.letters.filter(letter => 
-                letter.to === state.user.name && !letter.read
-            ).length;
+            const unreadCount = state.letters.filter(letter => !letter.read && letter.received).length;
             const badge = document.getElementById('unread-count');
             if (unreadCount > 0) {
                 badge.textContent = unreadCount;
@@ -1033,9 +1048,7 @@
 
         function updateMailboxDisplay() {
             const envelope = document.querySelector('.envelope');
-            const unreadCount = state.letters.filter(letter => 
-                letter.to === state.user.name && !letter.read
-            ).length;
+            const unreadCount = state.letters.filter(letter => !letter.read && letter.received).length;
             
             if (unreadCount === 0) {
                 envelope.style.opacity = '0.5';
@@ -1046,12 +1059,6 @@
             }
         }
 
-        function toggleUser() {
-            state.user.name = state.user.name === 'Kiru' ? 'Aadya' : 'Kiru';
-            saveState();
-            updateUI();
-        }
-
         function showView(viewName) {
             document.querySelectorAll('.view').forEach(view => {
                 view.classList.remove('active');
@@ -1060,8 +1067,6 @@
 
             if (viewName === 'write') {
                 setupWriteForm();
-            } else if (viewName === 'prompts') {
-                generateWeeklyPrompts();
             } else if (viewName === 'received') {
                 updateReceivedLetters();
             }
@@ -1069,15 +1074,12 @@
 
         function openLetter() {
             const envelope = document.querySelector('.envelope');
-            const unreadLetters = state.letters.filter(letter => 
-                letter.to === state.user.name && !letter.read
-            );
+            const unreadLetters = state.letters.filter(letter => !letter.read && letter.received);
 
             if (unreadLetters.length > 0) {
                 envelope.classList.add('opening');
                 const letter = unreadLetters[0];
                 letter.read = true;
-                letter.received = true;
                 state.currentLetter = letter;
                 saveState();
 
@@ -1100,32 +1102,37 @@
                 day: 'numeric'
             });
 
-            // Apply custom paper style if available
+            // Apply custom styles if available
             if (letter.paperStyle) {
                 content.className = `letter-card paper-${letter.paperStyle}`;
-            } else {
-                content.className = 'letter-card';
             }
 
-            let attachmentsHtml = '';
-            if (letter.attachments && letter.attachments.length > 0) {
-                attachmentsHtml = '<div style="margin-top: 20px;">';
-                letter.attachments.forEach(attachment => {
-                    if (attachment.type === 'photo') {
-                        attachmentsHtml += `<div style="display: inline-block; margin: 5px; padding: 10px; background: white; box-shadow: 0 2px 8px var(--paper-shadow); transform: rotate(-2deg);"><img src="${attachment.srcOrText}" alt="Attached photo" style="max-width: 100px; max-height: 100px; border-radius: 4px;"></div>`;
-                    }
-                });
-                attachmentsHtml += '</div>';
+            let decorationsHtml = '';
+            if (letter.decorations && letter.decorations.length > 0) {
+                decorationsHtml = `<div style="text-align: center; font-size: 1.5rem; margin-bottom: 15px;">${letter.decorations.join(' ')}</div>`;
             }
+
+            let imagesHtml = '';
+            if (letter.images && letter.images.length > 0) {
+                imagesHtml = '<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">';
+                letter.images.forEach(img => {
+                    imagesHtml += `<img src="${img}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px var(--paper-shadow);" alt="Attached image">`;
+                });
+                imagesHtml += '</div>';
+            }
+
+            const fontFamily = letter.fontStyle ? getFontFamily(letter.fontStyle) : "'Caveat', cursive";
+            const textColor = letter.textColor || 'var(--ink)';
 
             content.innerHTML = `
                 <div class="letter-meta">
                     <div>From: <strong>${letter.from}</strong></div>
                     <div>${date}</div>
                 </div>
-                <h3 style="font-family: 'Caveat', cursive; font-size: 1.5rem; margin-bottom: 15px; color: var(--moss);">${letter.subject}</h3>
-                <div class="letter-body">${letter.body.replace(/\n/g, '<br>')}</div>
-                ${attachmentsHtml}
+                ${decorationsHtml}
+                <h3 style="font-family: ${fontFamily}; font-size: 1.5rem; margin-bottom: 15px; color: var(--moss);">${letter.subject}</h3>
+                <div class="letter-body" style="font-family: ${fontFamily}; color: ${textColor};">${letter.body.replace(/\n/g, '<br>')}</div>
+                ${imagesHtml}
             `;
         }
 
@@ -1134,8 +1141,6 @@
         }
 
         function setupWriteForm(isReply = false, originalLetter = null) {
-            console.log('Setting up write form. Reply:', isReply);
-            
             const toField = document.getElementById('to-field');
             const subjectField = document.getElementById('subject-field');
             const bodyField = document.getElementById('body-field');
@@ -1147,11 +1152,11 @@
                 bodyField.focus();
                 bodyField.setSelectionRange(0, 0);
             } else {
-                toField.value = state.user.name === 'Kiru' ? 'Aadya' : 'Kiru';
+                toField.value = '';
                 subjectField.value = '';
                 bodyField.value = '';
                 bodyField.placeholder = 'Dear friend...';
-                setTimeout(() => subjectField.focus(), 100);
+                setTimeout(() => toField.focus(), 100);
             }
         }
 
@@ -1161,7 +1166,7 @@
                 letterCard.style.animation = 'slideOut 0.6s cubic-bezier(.2,.7,.2,1)';
                 setTimeout(() => {
                     showView('mailbox');
-                    letterCard.style.animation = ''; // Reset animation
+                    letterCard.style.animation = '';
                 }, 500);
             } else {
                 showView('mailbox');
@@ -1170,35 +1175,31 @@
 
         function sendLetter(event) {
             event.preventDefault();
-            console.log('Sending letter...');
             
             const to = document.getElementById('to-field').value.trim();
             const subject = document.getElementById('subject-field').value.trim();
             const body = document.getElementById('body-field').value.trim();
 
-            console.log('Form values:', { to, subject, body });
-
-            if (!subject || !body) {
-                showToast('Please fill in both subject and message');
+            if (!to || !subject || !body) {
+                showToast('Please fill in all fields');
                 return false;
             }
 
             const letterCode = generateCode();
-            const decoratedBody = addDecorationsToLetter(body);
             const newLetter = {
                 id: 'letter_' + Date.now(),
-                from: state.user.name,
+                from: 'You',
                 to: to,
                 subject: subject,
-                body: decoratedBody,
+                body: body,
                 dateISO: new Date().toISOString(),
-                type: subject.toLowerCase().includes('prompt #') ? 'prompt' : 'letter',
-                stamps: [],
-                attachments: [],
                 read: false,
                 code: letterCode,
                 paperStyle: selectedPaper,
-                decorations: [...selectedDecorations]
+                fontStyle: selectedFont,
+                textColor: selectedColor,
+                decorations: [...selectedDecorations],
+                images: [...uploadedImages]
             };
 
             // Store in shared letters for code access
@@ -1208,7 +1209,6 @@
 
             state.letters.push(newLetter);
             saveState();
-            console.log('Letter saved to state:', newLetter);
 
             // Show sealing animation/feedback
             const submitBtn = document.querySelector('#letter-form button[type="submit"]');
@@ -1266,12 +1266,19 @@
                 return;
             }
 
+            // Check if letter already exists (only check received letters, not sent ones)
+            const existingLetter = state.letters.find(l => l.code === code && l.from !== 'You');
+            if (existingLetter) {
+                showToast('Letter already received!');
+                return;
+            }
+            
             // Add to personal mailbox
             const receivedLetter = {
                 ...letter,
                 id: 'received_' + Date.now(),
-                to: state.user.name,
-                read: false
+                read: false,
+                received: true
             };
             
             state.letters.push(receivedLetter);
@@ -1287,19 +1294,28 @@
         }
 
         function resetWriteForm() {
+            document.getElementById('to-field').value = '';
             document.getElementById('subject-field').value = '';
             document.getElementById('body-field').value = '';
             document.getElementById('body-field').placeholder = 'Dear friend...';
             document.getElementById('letter-form').reset();
             
             // Reset customizations
+            selectedPaper = 'vintage';
+            selectedFont = 'caveat';
+            selectedColor = '#3B3A39';
             selectedDecorations = [];
-            selectedPaper = 'parchment';
-            document.querySelectorAll('.paper-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector('.paper-btn[data-paper="parchment"]').classList.add('active');
-            updatePaperStyle();
-            updateDecorationPreview();
+            uploadedImages = [];
+            
+            // Reset UI
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-paper="vintage"]').classList.add('active');
+            document.querySelector('[data-font="caveat"]').classList.add('active');
+            document.querySelector('[data-color="#3B3A39"]').classList.add('active');
+            
             updatePreview();
+            updateDecorationPreview();
+            updateUploadedImages();
         }
 
         function cancelWriting() {
@@ -1311,7 +1327,7 @@
             const grid = document.getElementById('received-grid');
             if (!grid) return;
             
-            const receivedLetters = state.letters.filter(letter => letter.received && letter.to === state.user.name);
+            const receivedLetters = state.letters.filter(letter => letter.received || letter.from !== 'You');
 
             if (receivedLetters.length === 0) {
                 grid.innerHTML = '<div style="text-align: center; padding: 40px; font-family: \'Caveat\', cursive; font-size: 1.2rem; color: var(--moss); opacity: 0.7;">No received letters yet. Check your mailbox for new mail!</div>';
@@ -1353,34 +1369,11 @@
             });
         }
 
-        function generateWeeklyPrompts() {
-            const container = document.getElementById('prompts-container');
-            const today = new Date();
-            const weekNumber = Math.floor((today - new Date(today.getFullYear(), 0, 1)) / (7 * 24 * 60 * 60 * 1000));
-            const promptIndex = weekNumber % weeklyPrompts.length;
-            const currentPrompt = weeklyPrompts[promptIndex];
-
-            container.innerHTML = `
-                <div class="prompt-card">
-                    <div class="prompt-title">Week ${weekNumber + 1} Prompt</div>
-                    <div class="prompt-text">${currentPrompt}</div>
-                    <button class="btn btn-primary" onclick="respondToPrompt('${promptIndex}', '${currentPrompt}')">Write Response</button>
-                </div>
-            `;
-        }
-
         function replyToLetter() {
             if (state.currentLetter) {
                 setupWriteForm(true, state.currentLetter);
                 showView('write');
             }
-        }
-
-        function respondToPrompt(promptId, promptText) {
-            setupWriteForm();
-            document.getElementById('subject-field').value = `Prompt #${parseInt(promptId) + 1} Response`;
-            document.getElementById('body-field').placeholder = `Responding to: "${promptText}"\n\nYour thoughts...`;
-            showView('write');
         }
 
         // Drag and drop functionality
@@ -1401,7 +1394,7 @@
 
         function dropStamp(event) {
             event.preventDefault();
-            event.stopPropagation(); // Prevent envelope click from firing
+            event.stopPropagation();
             
             if (draggedStamp) {
                 const envelope = document.querySelector('.envelope');
@@ -1409,7 +1402,6 @@
                 const x = event.clientX - rect.left;
                 const y = event.clientY - rect.top;
 
-                // Create a new stamp on the envelope
                 const newStamp = document.createElement('div');
                 newStamp.className = 'stamp on-envelope';
                 newStamp.style.left = Math.max(5, Math.min(envelope.offsetWidth - 50, x - 22)) + 'px';
@@ -1424,7 +1416,6 @@
                 
                 envelope.appendChild(newStamp);
 
-                // Save stamp position
                 const stampId = Date.now() + Math.random();
                 newStamp.dataset.stampId = stampId;
                 saveStampPosition(stampId, draggedStamp, newStamp.style.left, newStamp.style.top, newStamp.style.transform);
@@ -1432,7 +1423,6 @@
                 showToast(`${draggedStamp} stamp placed!`);
             }
             
-            // Clean up
             if (draggedElement) {
                 draggedElement.classList.remove('dragging');
             }
@@ -1446,12 +1436,10 @@
         }
 
         function saveStampPosition(stampId, stampEmoji, left, top, transform) {
-            // Initialize stamps array if it doesn't exist
             if (!window.placedStamps) {
                 window.placedStamps = [];
             }
             
-            // Add new stamp position
             window.placedStamps.push({
                 id: stampId,
                 emoji: stampEmoji,
@@ -1460,14 +1448,12 @@
                 transform: transform
             });
             
-            // Save to localStorage
             localStorage.setItem('envelopeStamps', JSON.stringify(window.placedStamps));
         }
 
         function removeStamp(stampElement) {
             const stampId = stampElement.dataset.stampId;
             
-            // Remove from DOM with animation
             stampElement.style.transition = 'all 0.3s ease';
             stampElement.style.transform = 'scale(0) rotate(180deg)';
             stampElement.style.opacity = '0';
@@ -1478,7 +1464,6 @@
                 }
             }, 300);
             
-            // Remove from saved stamps
             if (window.placedStamps) {
                 window.placedStamps = window.placedStamps.filter(s => s.id != stampId);
                 localStorage.setItem('envelopeStamps', JSON.stringify(window.placedStamps));
@@ -1505,7 +1490,6 @@
                 });
             }, 300);
             
-            // Clear saved stamps
             window.placedStamps = [];
             localStorage.removeItem('envelopeStamps');
             
@@ -1588,84 +1572,141 @@
             }
         });
 
-        // Customization functionality
-        let selectedDecorations = [];
-        let selectedPaper = 'parchment';
-
+        // Customization functions
         function initializeCustomization() {
             // Paper selection
-            document.querySelectorAll('.paper-btn').forEach(btn => {
+            document.querySelectorAll('[data-paper]').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('.paper-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('[data-paper]').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     selectedPaper = this.dataset.paper;
-                    updatePaperStyle();
+                    updatePreview();
+                    showToast(`Paper style changed to ${this.title}`);
+                });
+            });
+
+            // Font selection
+            document.querySelectorAll('[data-font]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-font]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedFont = this.dataset.font;
+                    updatePreview();
+                });
+            });
+
+            // Color selection
+            document.querySelectorAll('[data-color]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-color]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedColor = this.dataset.color;
+                    updatePreview();
                 });
             });
 
             // Decoration selection
-            document.querySelectorAll('.decoration-btn').forEach(btn => {
+            document.querySelectorAll('[data-decoration]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const decoration = this.dataset.decoration;
                     if (!selectedDecorations.includes(decoration)) {
                         selectedDecorations.push(decoration);
                         updateDecorationPreview();
+                        updatePreview();
                     }
                 });
             });
         }
 
-        function updatePaperStyle() {
-            const writeForm = document.querySelector('.write-form');
-            writeForm.className = `write-form paper-${selectedPaper}`;
-            const previewCard = document.getElementById('preview-card');
-            previewCard.className = `preview-card paper-${selectedPaper}`;
-        }
-
-        function updateDecorationPreview() {
-            const preview = document.getElementById('decoration-preview');
-            preview.innerHTML = selectedDecorations.map(decoration => 
-                `<span class="decoration-item" onclick="removeDecoration('${decoration}')">${decoration}</span>`
-            ).join('');
-            
-            const previewDecorations = document.getElementById('preview-decorations');
-            previewDecorations.textContent = selectedDecorations.join(' ');
+        function getFontFamily(fontStyle) {
+            const fonts = {
+                'caveat': "'Caveat', cursive",
+                'special-elite': "'Special Elite', monospace",
+                'serif': 'serif',
+                'cursive': 'cursive'
+            };
+            return fonts[fontStyle] || "'Caveat', cursive";
         }
 
         function updatePreview() {
             const bodyText = document.getElementById('body-field').value || 'Dear friend...';
-            const previewText = document.querySelector('.preview-text');
+            const previewCard = document.getElementById('preview-card');
+            const previewText = document.getElementById('preview-text');
+            const previewContent = document.getElementById('preview-content');
+            const writeForm = document.querySelector('.write-form');
+            
+            // Apply paper style to both write form and preview
+            previewCard.className = `preview-card paper-${selectedPaper}`;
+            writeForm.className = `write-form paper-${selectedPaper}`;
+            
+            // Apply font and color
+            const fontFamily = getFontFamily(selectedFont);
+            previewContent.style.fontFamily = fontFamily;
+            previewContent.style.color = selectedColor;
+            
             previewText.textContent = bodyText;
+        }
+
+        function updateDecorationPreview() {
+            const preview = document.getElementById('decoration-preview');
+            const previewDecorations = document.getElementById('preview-decorations');
+            
+            preview.innerHTML = selectedDecorations.map(decoration => 
+                `<span class="decoration-item" onclick="removeDecoration('${decoration}')">${decoration}</span>`
+            ).join('');
+            
+            previewDecorations.textContent = selectedDecorations.join(' ');
         }
 
         function removeDecoration(decoration) {
             selectedDecorations = selectedDecorations.filter(d => d !== decoration);
             updateDecorationPreview();
+            updatePreview();
         }
 
-        function addDecorationsToLetter(letterContent) {
-            if (selectedDecorations.length > 0) {
-                const decorationLine = selectedDecorations.join(' ');
-                return letterContent + '\n\n' + decorationLine;
-            }
-            return letterContent;
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImages.push(e.target.result);
+                        updateUploadedImages();
+                        updatePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function updateUploadedImages() {
+            const container = document.getElementById('uploaded-images');
+            const previewImages = document.getElementById('preview-images');
+            
+            container.innerHTML = uploadedImages.map((img, index) => `
+                <div class="uploaded-image">
+                    <img src="${img}" alt="Uploaded image">
+                    <button class="remove-image" onclick="removeImage(${index})">×</button>
+                </div>
+            `).join('');
+            
+            previewImages.innerHTML = uploadedImages.map(img => 
+                `<img src="${img}" alt="Preview image">`
+            ).join('');
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            updateUploadedImages();
+            updatePreview();
         }
 
         // Initialize app when page loads
         document.addEventListener('DOMContentLoaded', () => {
             initializeApp();
+            loadSavedStamps();
             initializeCustomization();
-            // Clear all existing stamps first
-            localStorage.removeItem('envelopeStamps');
-            window.placedStamps = [];
-            
-            // Auto-uppercase letter code input
-            const codeInput = document.getElementById('letter-code');
-            if (codeInput) {
-                codeInput.addEventListener('input', function() {
-                    this.value = this.value.toUpperCase();
-                });
-            }
         });
     </script>
 </body>
