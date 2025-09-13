@@ -1,5 +1,41 @@
 import React, { useState, useEffect } from 'react';
 
+// API Configuration - will use your deployed Vercel URL
+const API_BASE = process.env.NODE_ENV === 'production' 
+  ? '/api' 
+  : '/api';
+
+// API Service
+const letterAPI = {
+  async sendLetter(letterData) {
+    const response = await fetch(`${API_BASE}/letters`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(letterData),
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to send letter');
+    }
+    
+    return response.json();
+  },
+
+  async getLetter(code) {
+    const response = await fetch(`${API_BASE}/letters?code=${code}`);
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch letter');
+    }
+    
+    return response.json();
+  }
+};
+
 // Simple routing hook
 const useRouter = () => {
   const [currentPath, setCurrentPath] = useState(window.location.hash.slice(1) || '/');
@@ -41,10 +77,18 @@ const Envelope = ({ onClick, isOpening = false, hasLetter = true }) => {
       </div>
       <div className="envelope-flap"></div>
       <div className="wax-seal"></div>
-      {hasLetter && <div className="unread-badge">1</div>}
+      {hasLetter && <div className="unread-badge">📬</div>}
     </div>
   );
 };
+
+// Loading component
+const Loading = ({ message = "Loading..." }) => (
+  <div className="loading">
+    <div className="loading-envelope">📮</div>
+    <p>{message}</p>
+  </div>
+);
 
 // Home page with centered envelope
 const HomePage = () => {
@@ -69,20 +113,25 @@ const HomePage = () => {
       <div className="letter-view">
         <div className="letter-card">
           <div className="letter-meta">
-            <div>From: <strong>Anonymous Friend</strong></div>
+            <div>From: <strong>The Mail Club Team</strong></div>
             <div>Today</div>
           </div>
-          <h3>Welcome to Digital Mail Club!</h3>
+          <h3>Welcome to Digital Mail Club! 🌟</h3>
           <div className="letter-body">
             Dear Friend,<br/><br/>
-            Welcome to our cozy corner of the internet! This is your digital mailbox where handwritten letters meet modern magic.<br/><br/>
-            Click "Write New" to compose your first letter, or share a letter code to read messages from friends.<br/><br/>
+            Welcome to our magical corner of the internet! This is your digital mailbox where heartfelt letters travel across the world instantly.<br/><br/>
+            <strong>How it works:</strong><br/>
+            • Click "Write New" to compose a letter<br/>
+            • Get a unique 6-character code<br/>
+            • Share the code with anyone, anywhere!<br/>
+            • They can read your letter from any device<br/><br/>
+            Your letters are now stored in the cloud and can be accessed from anywhere! Start spreading some joy! ✨<br/><br/>
             Happy letter writing!<br/><br/>
-            ✨ The Mail Club
+            💌 The Mail Club Team
           </div>
           <div className="letter-actions">
             <button className="btn btn-secondary" onClick={() => navigate('/write')}>
-              Write New
+              Write New Letter
             </button>
             <button className="btn btn-primary" onClick={closeLetter}>
               Close Letter
@@ -97,8 +146,11 @@ const HomePage = () => {
     <div className="mailbox">
       <Envelope onClick={handleEnvelopeClick} isOpening={isOpening} />
       <div className="nav-buttons">
-        <a href="#/write" className="btn btn-primary">Write New</a>
+        <a href="#/write" className="btn btn-primary">Write New Letter</a>
         <a href="#/view" className="btn btn-secondary">Read by Code</a>
+      </div>
+      <div className="stats">
+        <p>✨ Letters now travel instantly across the internet! ✨</p>
       </div>
     </div>
   );
@@ -108,62 +160,90 @@ const HomePage = () => {
 const WritePage = () => {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
+  const [senderName, setSenderName] = useState('');
   const [generatedCode, setGeneratedCode] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const generateCode = () => {
-    return Array.from({ length: 6 }, () =>
-      Math.floor(Math.random() * 36).toString(36).toUpperCase()
-    ).join('');
-  };
-
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!subject.trim() || !content.trim()) {
-      alert('Please fill in both subject and message');
+      setError('Please fill in both subject and message');
       return;
     }
 
-    const code = generateCode();
-    const letter = {
-      subject: subject.trim(),
-      content: content.trim(),
-      dateCreated: new Date().toISOString(),
-      id: Date.now()
-    };
+    setLoading(true);
+    setError('');
 
-    // Store in localStorage
-    localStorage.setItem(`letter_${code}`, JSON.stringify(letter));
-    setGeneratedCode(code);
+    try {
+      const result = await letterAPI.sendLetter({
+        subject: subject.trim(),
+        content: content.trim(),
+        senderName: senderName.trim() || 'Anonymous Friend'
+      });
+
+      setGeneratedCode(result.code);
+    } catch (error) {
+      console.error('Send error:', error);
+      setError(error.message || 'Failed to send letter. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {
     setSubject('');
     setContent('');
+    setSenderName('');
     setGeneratedCode(null);
+    setError('');
   };
 
+  if (loading) {
+    return <Loading message="Sealing your letter and sending to the cloud... 📮" />;
+  }
+
   if (generatedCode) {
+    const shareUrl = `${window.location.origin}${window.location.pathname}#/view?code=${generatedCode}`;
+    
     return (
       <div className="write-form">
-        <h2>✨ Letter Sealed & Sent!</h2>
+        <h2>✨ Letter Sent Successfully!</h2>
         <div className="success-message">
           <div className="code-display">
             <p>Your letter code is:</p>
             <div className="generated-code">{generatedCode}</div>
-            <p>Share this code with your recipient!</p>
+            <p>Share this code with anyone, anywhere in the world!</p>
           </div>
           <div className="share-link">
             <p>Or share this direct link:</p>
             <input 
               type="text" 
-              value={`${window.location.origin}${window.location.pathname}#/view?code=${generatedCode}`}
+              value={shareUrl}
               readOnly
               className="link-input"
               onClick={(e) => e.target.select()}
             />
+            <button 
+              className="btn btn-copy"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(shareUrl);
+                  alert('Link copied to clipboard! 📋');
+                } catch (err) {
+                  // Fallback for older browsers
+                  const input = document.querySelector('.link-input');
+                  input.select();
+                  document.execCommand('copy');
+                  alert('Link copied to clipboard! 📋');
+                }
+              }}
+            >
+              Copy Link 📋
+            </button>
           </div>
           <div className="nav-buttons">
             <button className="btn btn-primary" onClick={resetForm}>
-              Write Another
+              Write Another Letter
             </button>
             <a href="#/" className="btn btn-secondary">
               Back to Mailbox
@@ -176,8 +256,18 @@ const WritePage = () => {
 
   return (
     <div className="write-form">
-      <h2>Write a Letter</h2>
+      <h2>Write a Letter 💌</h2>
       <div>
+        <div className="form-group">
+          <label htmlFor="sender">Your Name (optional):</label>
+          <input
+            type="text"
+            id="sender"
+            value={senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+            placeholder="Anonymous Friend"
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="subject">Subject:</label>
           <input
@@ -195,14 +285,20 @@ const WritePage = () => {
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Dear friend..."
+            placeholder="Dear friend,&#10;&#10;I hope this letter finds you well..."
             rows="12"
             required
           />
         </div>
+        {error && <div className="error-message">{error}</div>}
         <div className="nav-buttons">
-          <button type="button" className="btn btn-primary" onClick={handleSend}>
-            Seal & Send
+          <button 
+            type="button" 
+            className="btn btn-primary" 
+            onClick={handleSend}
+            disabled={loading}
+          >
+            {loading ? 'Sending...' : 'Seal & Send 📮'}
           </button>
           <a href="#/" className="btn btn-secondary">
             Cancel
@@ -221,6 +317,7 @@ const ViewPage = () => {
   const [showLetter, setShowLetter] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const codeFromUrl = getParam('code');
@@ -230,19 +327,24 @@ const ViewPage = () => {
     }
   }, [getParam]);
 
-  const findLetter = (code) => {
+  const findLetter = async (code) => {
     if (!code.trim()) {
       setError('Please enter a letter code');
       return;
     }
 
-    const letterData = localStorage.getItem(`letter_${code.trim().toUpperCase()}`);
-    if (letterData) {
-      setLetter(JSON.parse(letterData));
-      setError('');
-    } else {
-      setError('Letter not found. Check the code and try again.');
+    setLoading(true);
+    setError('');
+
+    try {
+      const result = await letterAPI.getLetter(code.trim().toUpperCase());
+      setLetter(result.letter);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setError(error.message || 'Failed to find letter');
       setLetter(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -263,12 +365,16 @@ const ViewPage = () => {
     setIsOpening(false);
   };
 
+  if (loading) {
+    return <Loading message="Searching for your letter in the cloud... 🔍" />;
+  }
+
   if (showLetter && letter) {
     return (
       <div className="letter-view">
         <div className="letter-card">
           <div className="letter-meta">
-            <div>From: <strong>Anonymous Friend</strong></div>
+            <div>From: <strong>{letter.senderName}</strong></div>
             <div>{new Date(letter.dateCreated).toLocaleDateString()}</div>
           </div>
           <h3>{letter.subject}</h3>
@@ -282,7 +388,7 @@ const ViewPage = () => {
           </div>
           <div className="letter-actions">
             <button className="btn btn-secondary" onClick={() => navigate('/write')}>
-              Write Reply
+              Write Reply 💌
             </button>
             <button className="btn btn-primary" onClick={closeLetter}>
               Close Letter
@@ -296,7 +402,7 @@ const ViewPage = () => {
   return (
     <div className="view-page">
       <div className="code-entry">
-        <h2>Enter Letter Code</h2>
+        <h2>Enter Letter Code 🔑</h2>
         <div>
           <div className="form-group">
             <label htmlFor="code">6-Character Code:</label>
@@ -310,8 +416,13 @@ const ViewPage = () => {
               style={{ textTransform: 'uppercase' }}
             />
           </div>
-          <button type="button" className="btn btn-primary" onClick={handleCodeSubmit}>
-            Find Letter
+          <button 
+            type="button" 
+            className="btn btn-primary" 
+            onClick={handleCodeSubmit}
+            disabled={loading}
+          >
+            {loading ? 'Searching...' : 'Find Letter 🔍'}
           </button>
           {error && <div className="error-message">{error}</div>}
         </div>
@@ -322,7 +433,8 @@ const ViewPage = () => {
 
       {letter && (
         <div className="found-letter">
-          <h3>Letter Found!</h3>
+          <h3>Letter Found! 🎉</h3>
+          <p>From: <strong>{letter.senderName}</strong></p>
           <Envelope onClick={openEnvelope} isOpening={isOpening} />
         </div>
       )}
@@ -351,7 +463,7 @@ const App = () => {
       <div className="container">
         <div className="header">
           <h1 className="club-title">Digital Mail Club</h1>
-          <p className="privacy-label">Where letters find their way</p>
+          <p className="privacy-label">Letters that travel across the world ✨</p>
         </div>
 
         {renderPage()}
@@ -413,6 +525,28 @@ const App = () => {
           opacity: 0.8;
         }
 
+        /* Loading Component */
+        .loading {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 40px;
+          text-align: center;
+        }
+
+        .loading-envelope {
+          font-size: 3rem;
+          animation: bounce 2s infinite;
+          margin-bottom: 20px;
+        }
+
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+          40% { transform: translateY(-15px); }
+          60% { transform: translateY(-7px); }
+        }
+
         /* Mailbox View */
         .mailbox {
           display: flex;
@@ -420,6 +554,14 @@ const App = () => {
           align-items: center;
           gap: 30px;
           margin-top: 40px;
+        }
+
+        .stats {
+          text-align: center;
+          font-family: "Caveat", cursive;
+          font-size: 1.1rem;
+          color: var(--moss);
+          opacity: 0.8;
         }
 
         .envelope {
@@ -520,13 +662,12 @@ const App = () => {
           background: var(--faded-rose);
           color: white;
           border-radius: 50%;
-          width: 24px;
-          height: 24px;
+          width: 32px;
+          height: 32px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.8rem;
-          font-weight: bold;
+          font-size: 1rem;
           z-index: 4;
         }
 
@@ -539,9 +680,9 @@ const App = () => {
         }
 
         .btn {
-          padding: 10px 20px;
+          padding: 12px 24px;
           border: none;
-          border-radius: 20px;
+          border-radius: 25px;
           font-family: "Special Elite", monospace;
           font-size: 0.9rem;
           cursor: pointer;
@@ -549,6 +690,7 @@ const App = () => {
           text-decoration: none;
           display: inline-block;
           box-shadow: 0 4px 12px var(--paper-shadow);
+          font-weight: bold;
         }
 
         .btn-primary {
@@ -561,9 +703,23 @@ const App = () => {
           color: var(--ink);
         }
 
+        .btn-copy {
+          background: var(--moss);
+          color: white;
+          margin-top: 10px;
+          padding: 8px 16px;
+          font-size: 0.8rem;
+        }
+
         .btn:hover {
           transform: translateY(-2px);
           box-shadow: 0 6px 16px var(--paper-shadow);
+        }
+
+        .btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
         }
 
         /* Letter View */
